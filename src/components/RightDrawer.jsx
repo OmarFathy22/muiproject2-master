@@ -1,44 +1,50 @@
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  Divider,
-  ImageList,
-  ImageListItem,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-} from "@mui/material";
-import React from "react";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import CssBaseline from '@mui/material/CssBaseline';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import { Avatar, AvatarGroup, ImageList, ImageListItem, ListItemAvatar } from '@mui/material';
 
-const RightSection = ({ theme }) => {
-  const itemData = [
-    {
-      img: "https://media.istockphoto.com/id/1326417843/photo/cheerful-woman-enjoying-coffee-cup-in-a-winter-afternoon.jpg?s=612x612&w=0&k=20&c=H7N-YP6y0_A3A2P2WJaKkebcwRQtiFGECpF7xXjpj6I=",
-      title: "Breakfast",
-    },
-    {
-      img: "https://media.istockphoto.com/id/1352185962/photo/shot-of-a-young-woman-cheering-while-using-a-laptop-to-study-at-home.jpg?s=612x612&w=0&k=20&c=4L5IL_4dO5iwGzxzcJYIiLCV9pj2sHoFDFgLU070dC8=",
-      title: "Burger",
-    },
-    {
-      img: "https://media.istockphoto.com/id/1068899450/photo/young-woman-with-hot-drink.jpg?s=612x612&w=0&k=20&c=FG1nbWegy5Cwp3Axfgm7spo0nb6Mj4N80ZtKdzq57YE=",
-      title: "Camera",
-    },
-  ];
+const drawerWidth = 500;
+const itemData = [
+  {
+    img: "https://media.istockphoto.com/id/1326417843/photo/cheerful-woman-enjoying-coffee-cup-in-a-winter-afternoon.jpg?s=612x612&w=0&k=20&c=H7N-YP6y0_A3A2P2WJaKkebcwRQtiFGECpF7xXjpj6I=",
+    title: "Breakfast",
+  },
+  {
+    img: "https://media.istockphoto.com/id/1352185962/photo/shot-of-a-young-woman-cheering-while-using-a-laptop-to-study-at-home.jpg?s=612x612&w=0&k=20&c=4L5IL_4dO5iwGzxzcJYIiLCV9pj2sHoFDFgLU070dC8=",
+    title: "Burger",
+  },
+  {
+    img: "https://media.istockphoto.com/id/1068899450/photo/young-woman-with-hot-drink.jpg?s=612x612&w=0&k=20&c=FG1nbWegy5Cwp3Axfgm7spo0nb6Mj4N80ZtKdzq57YE=",
+    title: "Camera",
+  },
+];
+
+export default function PermanentDrawerRight({theme}) {
   return (
-    <Box
-      sx={{
-        maxWidth: "500px",
-        backgroundColor:
-        theme.palette.mode === "light" ? " rgb(247, 247, 247)" : null,
-        display:{xs:"none" , lg:"block"},
-        borderLeft: theme.palette.mode === "light" ?  "1px solid rgba(0, 0, 0, 0.12)" :" 1px solid rgba(255, 255, 255, 0.12)",
-      }}
-    >
-      <Box sx={{ position: "sticky", top: "85px", right: "0" }} >
+    <Box sx={{ display:{xs:"none", lg:"flex"} }}>
+      <CssBaseline />
+    
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
+        }}
+        variant="permanent"
+        anchor="right"
+      >
+        <Toolbar />
+        <Divider />
         <Box mt="20px" ml="20px ">
           <Typography
             variant="body1"
@@ -100,7 +106,7 @@ const RightSection = ({ theme }) => {
             variant="body1"
             sx={{ fontSize: "20px", fontWeight: "300" }}
           >
-            Latest Photos
+            Latest Conversations
           </Typography>
           <List
             sx={{ width: "100%", maxWidth: "97%", bgcolor: "background.paper" }}
@@ -181,9 +187,7 @@ const RightSection = ({ theme }) => {
             </ListItem>
           </List>
         </Box>
-      </Box>
+      </Drawer>
     </Box>
   );
-};
-
-export default RightSection;
+}

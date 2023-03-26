@@ -10,8 +10,8 @@ import React, { useMemo, useState } from "react";
 import { Outlet } from "react-router";
 import getDesignTokens from "styles/MyTheme";
 import MainContent from "./components/MainContent";
-import RightSection from "./components/RightSection";
 import DRAWER from "./components/DRAWER";
+import RightDrawer from "./components/RightDrawer";
 
 
 const Root = (props) => {
@@ -65,7 +65,8 @@ const Root = (props) => {
           />
           <MainContent theme={theme} showList={showList} />
           {/* <Loading/> */}
-          <RightSection theme={theme} />
+          {/* <RightSection theme={theme} /> */}
+          <RightDrawer theme={theme} />
         </Stack>
         <Outlet />
       </Box>
