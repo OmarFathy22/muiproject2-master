@@ -1,49 +1,62 @@
-import { Box, Checkbox, Fade, Menu, MenuItem, Skeleton } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import ShareIcon from "@mui/icons-material/Share";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import { Favorite, FavoriteBorder } from "@mui/icons-material";
-import { useState } from "react";
-import AddPostModal from "./postModal/AddPostModal";
+// main
 import { useCollection } from "react-firebase-hooks/firestore";
-import { collection, deleteDoc, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, orderBy, query, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 import logo from "../images/me.jpg";
-import React from "react";
+import React, { useState } from "react";
 import { doc } from "firebase/firestore";
-
+import {
+  Avatar,
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Checkbox,
+  Fade,
+  IconButton,
+  Menu,
+  MenuItem,
+  Skeleton,
+  Typography,
+} from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import Favorite from "@mui/icons-material/Favorite";
+import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import ShareIcon from "@mui/icons-material/Share";
+import AddPostModal from "./postModal/AddPostModal";
 
 const MainContent = ({ theme, showList }) => {
-  const [value, loading] = useCollection(collection(db, "Omar Fathy"));
-
+  const [value, loading] = useCollection(
+    query(collection(db, "Omar Fathy"), orderBy("id", "desc"))
+  );
   const [anchorEl, setAnchorEl] = useState(null);
   const n = 8;
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
   const ID = new Date().getTime().toString();
-  const deletePost = async(id) => {
+  const deletePost = async (id) => {
     await deleteDoc(doc(db, "Omar Fathy", id));
-  }
-  const updatePost = async(id , checked , checked2) => {
+  };
+
+  const updatePost = async (id, checked, checked2) => {
     await updateDoc(doc(db, "Omar Fathy", id), {
-      liked: checked ,
+      liked: checked,
       bookmarked: checked2,
     });
-  }
+  };
+
   if (loading) {
     return (
       <Box
@@ -56,7 +69,10 @@ const MainContent = ({ theme, showList }) => {
         }}
       >
         {[...Array(n)].map((e, i) => (
-          <Card sx={{ maxWidth: 450, mr: "auto", ml: "auto", mb: "40px" }}>
+          <Card
+            sx={{ maxWidth: 450, mr: "auto", ml: "auto", mb: "40px" }}
+            key={i}
+          >
             <CardHeader
               avatar={
                 <Skeleton
@@ -76,7 +92,6 @@ const MainContent = ({ theme, showList }) => {
               }
               subheader={<Skeleton animation="wave" height={10} width="40%" />}
             />
-
             <Skeleton
               sx={{ height: 190 }}
               animation="wave"
@@ -97,6 +112,7 @@ const MainContent = ({ theme, showList }) => {
       </Box>
     );
   }
+
   if (value) {
     return (
       <Box
@@ -142,25 +158,24 @@ const MainContent = ({ theme, showList }) => {
                     </IconButton>
                     <Menu
                       id="fade-menu"
-                      MenuListProps={{
-                        "aria-labelledby": "fade-button",
-                      }}
+                      MenuListProps={{ "aria-labelledby": "fade-button" }}
                       anchorEl={anchorEl}
                       open={open}
                       onClose={handleClose}
                       TransitionComponent={Fade}
-                    >
+                      >
                       <MenuItem
-                      sx={{ p: "5px 30px" }} onClick={() => {
-                        handleClose();
-                        deletePost(post.id);
-                      }}>
+                        sx={{ p: "5px 30px" }}
+                        onClick={() => {
+                          handleClose();
+                          // deletePost(post.id);
+                        }}
+                      >
                         Delete
                       </MenuItem>
                       <MenuItem sx={{ p: "5px 30px" }} onClick={handleClose}>
                         Edit
                       </MenuItem>
-
                     </Menu>
                   </Box>
                 }
@@ -194,18 +209,35 @@ const MainContent = ({ theme, showList }) => {
                 <Checkbox
                   checked={post.data().liked}
                   onChange={(e) => {
-                    updatePost(post.id , e.target.checked , post.data().bookmarked);
+                    updatePost(
+                      post.id,
+                      e.target.checked,
+                      post.data().bookmarked
+                    );
                   }}
                   icon={<FavoriteBorder />}
                   checkedIcon={<Favorite sx={{ color: "red" }} />}
                 />
-                <IconButton aria-label="share">
+                <IconButton 
+                 
+                aria-label="share">
                   <ShareIcon />
                 </IconButton>
                 <Box sx={{ flexGrow: "1" }} />
+                <IconButton onClick={
+                 () => {
+                  deletePost(post.id);
+                 }
+                 }>
+                  <DeleteIcon/>
+                </IconButton>
                 <Checkbox
                   onChange={(e) => {
-                    updatePost(post.id , post.data().liked , e.target.checked);
+                    updatePost(
+                      post.id,
+                      post.data().liked,
+                      e.target.checked
+                    );
                   }}
                   checked={post.data().bookmarked}
                   icon={<BookmarkBorderOutlinedIcon />}
@@ -217,7 +249,9 @@ const MainContent = ({ theme, showList }) => {
         })}
         {/* Modal is landing here */}
         <AddPostModal theme={theme} ID={ID} />
-        <h1 id = "last_post" style={{visibility:"hidden"}} >Omar fathy</h1>
+        <h1 id="last_post" style={{ visibility: "hidden" }}>
+          Omar fathy
+        </h1>
       </Box>
     );
   }

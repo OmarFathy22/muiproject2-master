@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import {
   Avatar,
   Button,
@@ -359,40 +358,7 @@ export default function TransitionsModal({ theme , ID }) {
       <SNACKBAR
         OPEN={openPostsnackbar}
         setOPEN={setopenPostsnackbar}
-        Message={
-          <div style={{ padding: "0", display: "flex", alignItems: "center" }}>
-            <Typography  color="inherit"
-              sx={{
-                width: "100%",
-                height: "100%",
-                fontFamily: "Roboto, Helvetica, Arial, sans-serif",
-                fontWeight: "100",
-                fontSize: "17px",
-                lineHeight: "1.43",
-                letterSpacing: "0.01071em",
-              }}>
-              {" "}
-              New Post Created
-            </Typography>
-            <div>
-              <a
-              onClick={
-                () => {
-                 setopenPostsnackbar(false) 
-                }
-              }
-               style={{
-                color: "inherit",
-                marginLeft: "5px",
-                paddingTop: "5px",
-               }}
-                href="#last_post"
-              >
-                <ArrowDownwardIcon sx={{mr:"15px"}} />
-              </a>
-            </div>
-          </div>
-        }
+        Message= "Post Uploaded Successfully!"
         time={5000}
         y={"top"}
         x={"center"}
