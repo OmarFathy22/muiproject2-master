@@ -4,14 +4,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
-import {
-  Avatar,
-  Button,
-  Fab,
-  Stack,
-  TextField,
-  Tooltip,
-} from "@mui/material";
+import { Avatar, Button, Fab, Stack, TextField, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -29,11 +22,14 @@ import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 import logo from "../../images/me.jpg";
 import { doc, setDoc } from "firebase/firestore";
-import moment from "moment"; 
+import moment from "moment";
 import { useSnackbar } from "notistack";
 import SNACKBAR from "./Snackbar";
+import FeelingMENU from "./feelingMENU";
+import MentionMENU from "./mentionMENU";
 
-export default function TransitionsModal({ theme , ID }) {
+
+export default function TransitionsModal({ theme, ID }) {
   const [OPEN, setOPEN] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -51,6 +47,7 @@ export default function TransitionsModal({ theme , ID }) {
   const [Postsuccess, setPostsuccess] = useState(true);
   const [LOADING, setLOADING] = useState(true);
   const [UPLOAD, setUPLOAD] = useState(null);
+  const [UPLOADMEDIA, setUPLOADMEDIA] = useState(true);
   const [imagesUrl, setImagesUrl] = useState([]);
   const [videoUrl, setvideoUrl] = useState([]);
   const [Media, setMedia] = useState(null);
@@ -65,6 +62,7 @@ export default function TransitionsModal({ theme , ID }) {
       uploadVideo();
     }
     setLOADING(true);
+    setUPLOADMEDIA(true);
   };
   const SetData = async () => {
     await setDoc(doc(db, "Omar Fathy", ID), {
@@ -117,6 +115,7 @@ export default function TransitionsModal({ theme , ID }) {
     const imageRef = ref(storage, `images/${image.name + v4()} `);
     uploadBytes(imageRef, image).then((res) => {
       setUPLOAD(null);
+      setUPLOADMEDIA(false);
       setOPEN(true);
       getDownloadURL(res.ref).then((url) => {
         setImagesUrl((prev) => [...prev, url]);
@@ -128,6 +127,7 @@ export default function TransitionsModal({ theme , ID }) {
     const imageRef = ref(storage, `videos/${video.name + v4()} `);
     uploadBytes(imageRef, video).then((res) => {
       setUPLOAD(null);
+      setUPLOADMEDIA(false);
       setOPEN(true);
       handleClickVariant("Your video uploaded successfully", "success");
       getDownloadURL(res.ref).then((url) => {
@@ -221,7 +221,7 @@ export default function TransitionsModal({ theme , ID }) {
               <Stack
                 direction="row"
                 sx={{
-                  width: "27%",
+                  // width: {xs:"37%" , sm:"27%"},
                   justifyContent: "space-between",
                   pt: "10px",
                 }}
@@ -232,6 +232,7 @@ export default function TransitionsModal({ theme , ID }) {
                     setMedia("image");
                     setUPLOAD("image");
                     setLOADING(false);
+                    setUPLOADMEDIA(false);
                     setSuccess(true);
                   }}
                   type="file"
@@ -245,6 +246,7 @@ export default function TransitionsModal({ theme , ID }) {
                     setMedia("video");
                     setUPLOAD("video");
                     setLOADING(false);
+                    setUPLOADMEDIA(false);
                     setSuccess(true);
                   }}
                   type="file"
@@ -252,20 +254,24 @@ export default function TransitionsModal({ theme , ID }) {
                   style={{ display: "none" }}
                   id="contained-video-file"
                 />
-                <Tooltip title="Add Feeling" placement="bottom">
-                  <EmojiEmotionsIcon
+                {/* <Tooltip title="Add Feeling" placement="bottom"> */}
+                  {/* <EmojiEmotionsIcon
                     sx={{
                       color: theme.palette.primary.main,
                       cursor: "pointer",
+                      mr: "13px",
                     }}
-                  />
-                </Tooltip>
+                  /> */}
+                  <FeelingMENU theme={theme} EmoJiIcon={EmojiEmotionsIcon}/>
+                {/* </Tooltip> */}
                 <Tooltip title="Add Photo" placement="bottom">
                   <label htmlFor="contained-image-file">
                     <InsertPhotoIcon
                       sx={{
                         color: theme.palette.secondary.main,
                         cursor: "pointer",
+                      mr: "13px",
+
                       }}
                     />
                   </label>
@@ -276,15 +282,13 @@ export default function TransitionsModal({ theme , ID }) {
                       sx={{
                         color: theme.palette.success.main,
                         cursor: "pointer",
+                      mr: "13px",
+
                       }}
                     />
                   </label>
                 </Tooltip>
-                <Tooltip title="Add Mention" placement="bottom">
-                  <PersonAddIcon
-                    sx={{ color: theme.palette.error.main, cursor: "pointer" }}
-                  />
-                </Tooltip>
+                <MentionMENU theme={theme} EmoJiIcon={PersonAddIcon} />
               </Stack>
               <Box>
                 {UPLOAD && (
@@ -329,36 +333,45 @@ export default function TransitionsModal({ theme , ID }) {
                 </DemoItem>
               </DemoContainer>
             </LocalizationProvider>
-            <PostButton
-              image={image}
-              imagesUrl={imagesUrl}
-              PostText={PostText}
-              setImage={setImage}
-              Media={Media}
-              videoUrl={videoUrl}
-              func={SetData}
-              LOADING={PostLOADING}
-              success={Postsuccess}
-              setLOADING={setPostLOADING}
-              setSuccess={setPostsuccess}
-            >
-              Post
-            </PostButton>
+            {!UPLOADMEDIA && (
+              <PostButton
+                image={image}
+                imagesUrl={imagesUrl}
+                PostText={PostText}
+                setImage={setImage}
+                Media={Media}
+                videoUrl={videoUrl}
+                func={SetData}
+                LOADING={PostLOADING}
+                success={Postsuccess}
+                setLOADING={setPostLOADING}
+                setSuccess={setPostsuccess}
+              >
+                Post
+              </PostButton>
+            )}
+            {UPLOADMEDIA && (
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Box sx={{ width: "100%", mt: 1.5, position: "relative" }}>
+                  <Button sx={{ width: "100%" }} variant="contained" disabled={true}>POST</Button>
+                </Box>
+              </Box>
+            )}
           </Box>
         </Fade>
       </Modal>
       <SNACKBAR
         OPEN={OPEN}
         setOPEN={setOPEN}
-        Message={"Data Uploaded Successfully!"}
+        Message={"Media Uploaded Successfully!"}
         time={3500}
-        y={"bottom"}
-        x={"right"}
+        y={"top"}
+        x={"center"}
       />
       <SNACKBAR
         OPEN={openPostsnackbar}
         setOPEN={setopenPostsnackbar}
-        Message= "Post Uploaded Successfully!"
+        Message="New Post Added Successfully"
         time={5000}
         y={"top"}
         x={"center"}
