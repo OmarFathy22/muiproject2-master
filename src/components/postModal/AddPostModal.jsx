@@ -29,7 +29,7 @@ import FeelingMENU from "./feelingMENU";
 import MentionMENU from "./mentionMENU";
 
 
-export default function TransitionsModal({ theme, ID }) {
+export default function TransitionsModal({ theme, ID , FEELING , setFEELING }) {
   const [OPEN, setOPEN] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -42,12 +42,12 @@ export default function TransitionsModal({ theme, ID }) {
     }, 500);
   };
 
-  const [PostText, setPostText] = useState("");
+  const [PostText, setPostText] = useState(null);
   const [PostLOADING, setPostLOADING] = useState(false);
   const [Postsuccess, setPostsuccess] = useState(true);
   const [LOADING, setLOADING] = useState(true);
   const [UPLOAD, setUPLOAD] = useState(null);
-  const [UPLOADMEDIA, setUPLOADMEDIA] = useState(true);
+  const [UPLOADMEDIA, setUPLOADMEDIA] = useState(false);
   const [imagesUrl, setImagesUrl] = useState([]);
   const [videoUrl, setvideoUrl] = useState([]);
   const [Media, setMedia] = useState(null);
@@ -66,6 +66,7 @@ export default function TransitionsModal({ theme, ID }) {
   };
   const SetData = async () => {
     await setDoc(doc(db, "Omar Fathy", ID), {
+      feeling: FEELING,
       id: ID,
       name: "O",
       title: "Omar Fathy",
@@ -193,10 +194,21 @@ export default function TransitionsModal({ theme, ID }) {
                 >
                   {" "}
                   Omar Fathy
+                  
                 </Typography>
+               {FEELING &&   <Stack direction="row">
+               <Typography
+                sx={{ ml: "5px" ,color:theme.palette.primary.main ,   fontWeight: "500"}}
+                variant="body1" color="inherit">feels </Typography>
+                <Typography
+                sx={{ ml: "5px"  ,textTransform:"capitalize",  fontWeight: "500"}}
+                variant="body1" color="inherit">{FEELING} </Typography>
+               </Stack>
+                }
               </Stack>
             </Typography>
             <TextField
+              value={PostText}
               onChange={(e) => {
                 setPostText(e.target.value);
               }}
@@ -206,6 +218,7 @@ export default function TransitionsModal({ theme, ID }) {
               rows={3}
               placeholder="What's on your mind..."
               variant="standard"
+              
             />
 
             <Stack
@@ -254,15 +267,8 @@ export default function TransitionsModal({ theme, ID }) {
                   style={{ display: "none" }}
                   id="contained-video-file"
                 />
-                {/* <Tooltip title="Add Feeling" placement="bottom"> */}
-                  {/* <EmojiEmotionsIcon
-                    sx={{
-                      color: theme.palette.primary.main,
-                      cursor: "pointer",
-                      mr: "13px",
-                    }}
-                  /> */}
-                  <FeelingMENU theme={theme} EmoJiIcon={EmojiEmotionsIcon}/>
+              
+                  <FeelingMENU theme={theme} EmoJiIcon={EmojiEmotionsIcon} setFEELING={setFEELING}/>
                 {/* </Tooltip> */}
                 <Tooltip title="Add Photo" placement="bottom">
                   <label htmlFor="contained-image-file">
@@ -270,7 +276,7 @@ export default function TransitionsModal({ theme, ID }) {
                       sx={{
                         color: theme.palette.secondary.main,
                         cursor: "pointer",
-                      mr: "13px",
+                      mr: "10px",
 
                       }}
                     />
@@ -282,13 +288,13 @@ export default function TransitionsModal({ theme, ID }) {
                       sx={{
                         color: theme.palette.success.main,
                         cursor: "pointer",
-                      mr: "13px",
+                      mr: "10px",
 
                       }}
                     />
                   </label>
                 </Tooltip>
-                <MentionMENU theme={theme} EmoJiIcon={PersonAddIcon} />
+                <MentionMENU theme={theme} EmoJiIcon={PersonAddIcon} PostText={PostText} setPostText={setPostText} />
               </Stack>
               <Box>
                 {UPLOAD && (

@@ -6,6 +6,11 @@ import {  Stack, Tooltip, Typography } from "@mui/material";
 const ITEM_HEIGHT = 38;
 const feelings = [
   {
+     icon: "",
+     feeling: "no feeling",
+     id:"0"
+  },
+  {
      icon: "😁",
      feeling: "great",
      id:"1"
@@ -86,7 +91,7 @@ const feelings = [
      id:"16"
   }
 ];
-export default function LongMenu({ theme, EmoJiIcon  }) {
+export default function LongMenu({ theme, EmoJiIcon,setFEELING  }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -103,7 +108,7 @@ export default function LongMenu({ theme, EmoJiIcon  }) {
           sx={{
             color: theme.palette.primary.main,
             cursor: "pointer",
-            mr: "13px",
+            mr: "10px",
           }}
           aria-label="more"
           id="long-button"
@@ -131,7 +136,14 @@ export default function LongMenu({ theme, EmoJiIcon  }) {
         {feelings.map((option) => (
           <MenuItem
             key={option.id}
-            onClick={handleClose}
+            onClick={() => {
+              handleClose();
+              if(option.feeling !== "no feeling")
+              setFEELING(option.feeling + " " + option.icon);
+              else
+              setFEELING(null);
+              
+            }}
           >
             <Typography>
             <Stack direction="row" sx={{ alignItems: "center" }}>

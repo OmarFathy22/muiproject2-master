@@ -182,7 +182,7 @@ export default function PrimarySearchAppBar({showList , setshowList , handleDraw
             component="div"
             sx={{ display: { xs: 'block'} , overflow:"initial" , mr:"20px" }}
           >
-            MORATA-UI
+            POSTATI
           </Typography>
           <Search>
             <SearchIconWrapper >

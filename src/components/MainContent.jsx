@@ -1,6 +1,12 @@
 // main
 import { useCollection } from "react-firebase-hooks/firestore";
-import { collection, deleteDoc, orderBy, query, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  orderBy,
+  query,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../firebase/config";
 import logo from "../images/me.jpg";
 import React, { useState } from "react";
@@ -19,9 +25,10 @@ import {
   Menu,
   MenuItem,
   Skeleton,
+  Stack,
   Typography,
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
@@ -31,6 +38,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import AddPostModal from "./postModal/AddPostModal";
 
 const MainContent = ({ theme, showList }) => {
+  const [FEELING, setFEELING] = useState(null);
   const [value, loading] = useCollection(
     query(collection(db, "Omar Fathy"), orderBy("id", "desc"))
   );
@@ -86,17 +94,13 @@ const MainContent = ({ theme, showList }) => {
                 <Skeleton
                   animation="wave"
                   height={10}
-                  width="80%"
+                  width="40%"
                   style={{ marginBottom: 6 }}
                 />
               }
-              subheader={<Skeleton animation="wave" height={10} width="40%" />}
+              subheader={<Skeleton animation="wave" height={10} width="80%" />}
             />
-            <Skeleton
-              sx={{ height: 190 }}
-              animation="wave"
-              variant="rectangular"
-            />
+
             <CardContent>
               <React.Fragment>
                 <Skeleton
@@ -104,9 +108,14 @@ const MainContent = ({ theme, showList }) => {
                   height={10}
                   style={{ marginBottom: 6 }}
                 />
-                <Skeleton animation="wave" height={10} width="80%" />
+                <Skeleton animation="wave" height={10} width="100%" />
               </React.Fragment>
             </CardContent>
+            <Skeleton
+              sx={{ height: 190, mb: "50px" }}
+              animation="wave"
+              variant="rectangular"
+            />
           </Card>
         ))}
       </Box>
@@ -163,7 +172,7 @@ const MainContent = ({ theme, showList }) => {
                       open={open}
                       onClose={handleClose}
                       TransitionComponent={Fade}
-                      >
+                    >
                       <MenuItem
                         sx={{ p: "5px 30px" }}
                         onClick={() => {
@@ -179,9 +188,33 @@ const MainContent = ({ theme, showList }) => {
                     </Menu>
                   </Box>
                 }
-                title={post.data().title}
+                title={!post.data().feeling?<Typography
+                  sx={{  fontWeight: "300"}}
+                  variant="body1" color="inherit">{post.data().title} </Typography>: (
+                  <Stack direction="row">
+                  <Typography
+                   sx={{  fontWeight: "300"}}
+                   variant="body1" color="inherit">{post.data().title} </Typography>
+                  <Typography
+                   sx={{ ml: "5px" ,color:theme.palette.primary.main ,   fontWeight: "500"}}
+                   variant="body1" color="inherit">feels </Typography>
+                   <Typography
+                   sx={{ ml: "5px"  ,textTransform:"capitalize",  fontWeight: "500"}}
+                   variant="body1" color="inherit">{post.data().feeling} </Typography>
+                  </Stack>
+                )}
                 subheader={post.data().date}
               />
+              <CardContent>
+                <Typography
+                  dir="auto"
+                  component="p"
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  {post.data().body}
+                </Typography>
+              </CardContent>
               {post.data().mediaType === "image" && (
                 <CardMedia
                   component="img"
@@ -200,13 +233,15 @@ const MainContent = ({ theme, showList }) => {
                   Your browser does not support HTML video.
                 </video>
               )}
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  {post.data().body}
-                </Typography>
-              </CardContent>
+
               <CardActions disableSpacing>
                 <Checkbox
+                  // hover
+                  sx={{
+                    "&:hover": {
+                      backgroundColor:{xs:"transparent",md:"rgba(255, 255, 255, 0.08)"},
+                    },
+                  }}
                   checked={post.data().liked}
                   onChange={(e) => {
                     updatePost(
@@ -218,26 +253,36 @@ const MainContent = ({ theme, showList }) => {
                   icon={<FavoriteBorder />}
                   checkedIcon={<Favorite sx={{ color: "red" }} />}
                 />
-                <IconButton 
-                 
+                <IconButton
+                sx={{
+                  "&:hover": {
+                    backgroundColor:{xs:"transparent",md:"rgba(255, 255, 255, 0.08)"},
+                  },
+                }}
                 aria-label="share">
                   <ShareIcon />
                 </IconButton>
                 <Box sx={{ flexGrow: "1" }} />
-                <IconButton onClick={
-                 () => {
-                  deletePost(post.id);
-                 }
-                 }>
-                  <DeleteIcon/>
+                <IconButton
+                  sx={{
+                    "&:hover": {
+                      backgroundColor:{xs:"transparent",md:"rgba(255, 255, 255, 0.08)"},
+                    },
+                  }}
+                  onClick={() => {
+                    deletePost(post.id);
+                  }}
+                >
+                  <DeleteIcon />
                 </IconButton>
                 <Checkbox
+                  sx={{
+                    "&:hover": {
+                      backgroundColor:{xs:"transparent",md:"rgba(255, 255, 255, 0.08)"},
+                    },
+                  }}
                   onChange={(e) => {
-                    updatePost(
-                      post.id,
-                      post.data().liked,
-                      e.target.checked
-                    );
+                    updatePost(post.id, post.data().liked, e.target.checked);
                   }}
                   checked={post.data().bookmarked}
                   icon={<BookmarkBorderOutlinedIcon />}
@@ -248,10 +293,7 @@ const MainContent = ({ theme, showList }) => {
           );
         })}
         {/* Modal is landing here */}
-        <AddPostModal theme={theme} ID={ID} />
-        <h1 id="last_post" style={{ visibility: "hidden" }}>
-          Omar fathy
-        </h1>
+        <AddPostModal theme={theme} ID={ID} FEELING={FEELING} setFEELING={setFEELING} />
       </Box>
     );
   }
