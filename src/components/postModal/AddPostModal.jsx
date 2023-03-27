@@ -38,7 +38,7 @@ export default function TransitionsModal({ theme, ID , FEELING , setFEELING }) {
     setTimeout(() => {
       setMedia(null);
       setUPLOAD(null);
-      setPostText(null);
+      setPostText("");
     }, 500);
   };
 
