@@ -42,7 +42,7 @@ export default function TransitionsModal({ theme, ID , FEELING , setFEELING }) {
     }, 500);
   };
 
-  const [PostText, setPostText] = useState(null);
+  const [PostText, setPostText] = useState("");
   const [PostLOADING, setPostLOADING] = useState(false);
   const [Postsuccess, setPostsuccess] = useState(true);
   const [LOADING, setLOADING] = useState(true);
