@@ -37,7 +37,6 @@ export default function CircularIntegration({
           onClick={() => {
             setLOADING(true);
             func();
-            console.log(LOADING);
           }}
         >
           {children}

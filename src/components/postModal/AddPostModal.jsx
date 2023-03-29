@@ -143,15 +143,15 @@ export default function TransitionsModal({ theme, ID , FEELING , setFEELING }) {
     transform: "translate(-50%, -50%)",
     width: { xs: "85%", sm: 500 },
     bgcolor: "background.paper",
-    border: `2px solid ${theme.palette.mode === "dark" ? "#000" : "#888"}`,
+    border: `1px solid ${theme.palette.mode === "dark" ? "#222" : "#888"}`,
     borderRadius: "10px",
-    boxShadow: 24,
+    boxShadow: 6,
     p: 4,
     mr: { xs: "20px" },
   };
 
   return (
-    <Box>
+    <Box sx={{boxShadow: "none"}}>
       <Tooltip title="Add Post" placement="left">
         <Fab
           onClick={handleOpen}
@@ -163,6 +163,7 @@ export default function TransitionsModal({ theme, ID , FEELING , setFEELING }) {
         </Fab>
       </Tooltip>
       <Modal
+        sx={{boxShadow: "none"}}
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open}
@@ -184,7 +185,7 @@ export default function TransitionsModal({ theme, ID , FEELING , setFEELING }) {
             >
               Create Post
             </Typography>
-            <Typography sx={{ mt: 2 }}>
+            <Typography component="div" sx={{ mt: 2 } }>
               <Stack direction="row" sx={{ alignItems: "center" }}>
                 <Avatar alt="child" src={logo} />
                 <Typography

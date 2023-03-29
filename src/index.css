@@ -39,3 +39,7 @@ html {
 .border {
   border: 1px solid red;
 }
+
+.display-none {
+  display: none;
+}
