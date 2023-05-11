@@ -7,7 +7,7 @@ import {
   query,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "../firebase/config";
+import { db } from "../../firebase/config";
 import React, { useState } from "react";
 import { doc } from "firebase/firestore";
 import {

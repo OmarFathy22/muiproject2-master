@@ -16,7 +16,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs from "dayjs";
 import PostButton from "./PostButton";
-import { db, storage } from "../../firebase/config";
+import { db, storage } from "../../../firebase/config";
 import { useEffect, useState } from "react";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
